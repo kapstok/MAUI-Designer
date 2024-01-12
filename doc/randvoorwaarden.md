@@ -24,3 +24,7 @@ de MAUI Designer kunnen installeren en gebruiken.
 ## Hotreload
 
 Als je een wijziging doet in de XML, moet je Live in de Designer de wijziging kunnen zien.
+
+## Security
+
+Met het ontwerpen van de MAUI Designer, moet aan security worden gedacht. Stel, je laadt een XAML file in en die bevat een `Button` met een `click` attribuut naar de functie `Foo`. Toevallig is er in de broncode van de MAUI Designer een functie gedefinieerd met precies dezelfde naam. Dan moet het voor de gebruiker niet mogelijk zijn om die functie aan te roepen door op die `Button` te drukken. Dat zou feitelijk een voorbeeld van [Code Injection](https://owasp.org/www-community/attacks/Code_Injection) zijn.
