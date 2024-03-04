@@ -1,0 +1,4 @@
+*.DS_Store
+src/MauiDesigner/MauiDesigner/bin
+src/MauiDesigner/MauiDesigner/obj
+src/MauiDesigner/.idea
