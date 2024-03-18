@@ -15,7 +15,12 @@ public partial class MainPage : ContentPage
         InitializeComponent();
         timer = Application.Current.Dispatcher.CreateTimer();
         timer.Interval = TimeSpan.FromSeconds(5);
-        timer.Tick += (sender, e) => Navigation.PopAsync();
+        timer.Tick += (sender, e) =>
+        {
+            Refresh();
+            // Preview(sender, e);
+            Console.WriteLine("REFRESH");
+        };
 
         CheckForUpdates();
     }
@@ -60,8 +65,7 @@ public partial class MainPage : ContentPage
 
     private void getAllNodes(XmlNode node)
     {
-        Console.WriteLine(node.Name);
-
+        Console.WriteLine(node.NamespaceURI);
         if (node.Name == "Button")
         {
             node.Attributes.Remove(node.Attributes["Clicked"]);
@@ -71,6 +75,32 @@ public partial class MainPage : ContentPage
         {
             getAllNodes(node.ChildNodes[i]);
         }
+    }
+
+    private void Refresh()
+    {
+        string path = ((Editor)FindByName("Editor")).Text;
+        string xaml = File.ReadAllText(path);
+        XmlDocument doc = new XmlDocument();
+        doc.LoadXml(xaml);
+
+        for (int i = 0; i < doc.ChildNodes.Count; i++)
+        {
+            getAllNodes(doc.ChildNodes[i]);
+        }
+
+        try
+        {
+            ContentPage toBeDisplayed = new ContentPage().LoadFromXaml(doc.OuterXml);
+            AppShell.Current.CurrentItem = toBeDisplayed;
+        }
+        catch (XamlParseException ex)
+        {
+            ((ContentPage)Shell.Current.CurrentPage).Title = "Error loading XAML. See terminal output for details.";
+            Shell.SetBackgroundColor(this, Color.FromRgb(0xff, 0x0, 0x0));
+            Console.WriteLine(ex);
+        }
+        timer.Start();        
     }
 
     private void Preview(object sender, EventArgs e)
@@ -85,9 +115,17 @@ public partial class MainPage : ContentPage
             getAllNodes(doc.ChildNodes[i]);
         }
 
-        ContentPage btn = new ContentPage().LoadFromXaml(doc.OuterXml);
-        Navigation.PushAsync(btn);
-        
+        try
+        {
+            ContentPage toBeDisplayed = new ContentPage().LoadFromXaml(doc.OuterXml);
+            Navigation.PushAsync(toBeDisplayed);
+        }
+        catch (XamlParseException ex)
+        {
+            ((ContentPage)Shell.Current.CurrentPage).Title = "Error loading XAML. See terminal output for details.";
+            Shell.SetBackgroundColor(this, Color.FromRgb(0xff, 0x0, 0x0));
+            Console.WriteLine(ex);
+        }
         timer.Start();
     }
 
@@ -105,7 +143,7 @@ public partial class MainPage : ContentPage
         }
         catch (Exception ex)
         {
-            
+            Console.WriteLine(ex);
         }
     }
 }
