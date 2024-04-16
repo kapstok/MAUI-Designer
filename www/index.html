@@ -1,8 +1,53 @@
 <html>
   <head>
     <title>Home - MAUI Designer</title>
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <h1>Welkom op de website van MAUI Designer</h1>
+    <header>
+      <h1 class="thin">Maui</h1>
+      <h1 class="thick">Designer.</h1>
+      <span class="subtle">Versie 0.1</span>
+      <section class="dropdown">
+        <span class="download">Download</span>
+        <section onclick="location.href='https://kapstok.github.io/MAUI-Designer/mauidesigner-windows/maui-designer.msix';" class="dropdown-optn">
+          Windows
+        </section>
+        <section onclick="location.href='https://kapstok.github.io/MAUI-Designer/mauidesigner-apple-silicon/apple-silicon-release.zip';" class="dropdown-optn">
+          Apple Silicon
+        </section>
+      </section>
+
+    </header>
+
+    <main>
+      <img class="logo" src="nhlstenden.png" alt="NHL Stenden logo"/>
+      <h2>Waarom een designer?</h2>
+
+      <p>
+        Je kunt natuurlijk een grafische interface maken met MAUI op basis van alleen code.<br>
+        Je moet dan een inschatting maken hoe je grafische interface eruit gaat zien op basis van de code die je hebt geschreven.
+        Een andere mogelijkheid is om het programma te compileren en te zien hoe het eruit ziet, maar dat kan wel even duren.
+        Daarom is de MAUI Designer een oplossing. Je selecteert een XAML bestand en de MAUI Designer kijkt ieder vijf seconden naar
+        wijzigingen. Als de XAML gewijzigd is, dan toont de MAUI Designer hoe je applicatie eruit zou komen te zien als je het
+        gewijzigde XAML bestand zou gebruiken.
+      </p>
+
+      <h2>Workflow</h2>
+
+      <p>
+        Een handige manier van werken is heel persoonlijk. Wat je bijvoorbeeld kunt doen is in het begin een XAML bestand laden.
+        Terwijl je code schrijft, kan je met Alt+Tab voor Windows en Cmd+Tab voor OS X wisselen tussen vensters. Op die manier kan
+        je snel even kijken hoe je applicatie eruit gaat zien. Daarna kan je weer snel in de code duiken om verbeteringen aan te
+        brengen.
+      </p>
+
+      <h2>Bijdragen</h2>
+
+      <p>
+        Als je een foutje in het programma ziet, of je hebt een suggestie hoe het verbeterd kan worden, dan kan je een issue of een
+        Pull Request openen op onze <a href="https://github.com/kapstok/MAUI-Designer">repository</a>.
+      </p>
+    </main>
   </body>
 </html>
