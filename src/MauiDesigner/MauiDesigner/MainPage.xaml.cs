@@ -2,14 +2,17 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Xml;
+using System.IO;
+using System.Reflection;
+using Foundation;
 
 namespace MauiDesigner;
 
 public partial class MainPage : ContentPage
 {
     private IDispatcherTimer timer;
-    public const string CURRENT_VERSION = "0.1";
-    
+    public string CURRENT_VERSION = "unset";
+
     public MainPage()
     {
         InitializeComponent();
@@ -22,11 +25,55 @@ public partial class MainPage : ContentPage
             Console.WriteLine("REFRESH");
         };
 
+        // string version = NSBundle.MainBundle.PathForResource("version", "txt");
         CheckForUpdates();
     }
 
     private async void CheckForUpdates()
     {
+        HttpClient updateChecker = new HttpClient();
+        // {
+        //     BaseAddress = 
+        // };
+        
+        var version = new StreamReader(await FileSystem.OpenAppPackageFileAsync("version.txt"));
+        CURRENT_VERSION = version.ReadToEnd();
+        
+        Console.WriteLine("FFF");
+        var newestVersion = updateChecker.GetStringAsync(new Uri("http://allersma.be/versions/maui-designer.txt"));
+        Console.WriteLine("GGG");
+        while (false)
+        {
+            // newestVersion.RunSynchronously();
+            Console.WriteLine(newestVersion.Status);
+            Console.WriteLine("TTTT");
+            if (newestVersion.IsFaulted)
+            {
+                Console.WriteLine(newestVersion.Exception.Message);
+            }
+        }
+        Console.WriteLine("DDDD");
+
+        // newestVersion.Start();
+
+        // TaskStatus status = TaskStatus.Created;
+
+        // do
+        // {
+        //     if (status != newestVersion.Status)
+        //     {
+        //         Console.WriteLine(newestVersion.Status.ToString());
+        //         status = newestVersion.Status;
+        //     }
+        // } while (status != TaskStatus.RanToCompletion);
+        // Console.Write("Newest version: ");
+        // Console.WriteLine(newestVersion.Result);
+
+        // if (newestVersion.Result == CURRENT_VERSION)
+        // {
+        //     return;
+        // }
+        
         bool update = await DisplayAlert("Updates", "Er is een nieuwe update beschikbaar.\nWil je updaten?", "Ja", "Nee");
 
         if (!update) return;
