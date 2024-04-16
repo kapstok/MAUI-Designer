@@ -4,7 +4,6 @@ using System.Runtime.InteropServices;
 using System.Xml;
 using System.IO;
 using System.Reflection;
-using Foundation;
 
 namespace MauiDesigner;
 
@@ -32,59 +31,46 @@ public partial class MainPage : ContentPage
     private async void CheckForUpdates()
     {
         HttpClient updateChecker = new HttpClient();
-        // {
-        //     BaseAddress = 
-        // };
         
         var version = new StreamReader(await FileSystem.OpenAppPackageFileAsync("version.txt"));
         CURRENT_VERSION = version.ReadToEnd();
         
-        Console.WriteLine("FFF");
-        var newestVersion = updateChecker.GetStringAsync(new Uri("http://allersma.be/versions/maui-designer.txt"));
-        Console.WriteLine("GGG");
-        while (false)
+        Label status = (Label)FindByName("UpdateStatus");
+
+        try
         {
-            // newestVersion.RunSynchronously();
-            Console.WriteLine(newestVersion.Status);
-            Console.WriteLine("TTTT");
-            if (newestVersion.IsFaulted)
+            var newestVersion =
+                await updateChecker.GetStringAsync(new Uri("https://kapstok.github.io/MAUI-Designer/version.txt"));
+            Console.WriteLine(newestVersion);
+            Console.WriteLine(CURRENT_VERSION);
+
+            if (newestVersion == CURRENT_VERSION)
             {
-                Console.WriteLine(newestVersion.Exception.Message);
+                status.Text = "De designer is up-to-date.";
+                return;
             }
+            
+            status.Text = "Update beschikbaar. Herstart de designer voor de popup.";
+            status.TextColor = Colors.Red;
+            bool update = await DisplayAlert("Updates", "Er is een nieuwe update beschikbaar.\nWil je updaten?", "Ja",
+                "Nee");
+
+            if (!update) return;
+
+            // Download update from localhost:8000
+            HttpClient client = new HttpClient()
+            {
+                BaseAddress = new Uri("http://localhost:8000")
+            };
+
+            OpenUrl("http://localhost:8000");
         }
-        Console.WriteLine("DDDD");
-
-        // newestVersion.Start();
-
-        // TaskStatus status = TaskStatus.Created;
-
-        // do
-        // {
-        //     if (status != newestVersion.Status)
-        //     {
-        //         Console.WriteLine(newestVersion.Status.ToString());
-        //         status = newestVersion.Status;
-        //     }
-        // } while (status != TaskStatus.RanToCompletion);
-        // Console.Write("Newest version: ");
-        // Console.WriteLine(newestVersion.Result);
-
-        // if (newestVersion.Result == CURRENT_VERSION)
-        // {
-        //     return;
-        // }
-        
-        bool update = await DisplayAlert("Updates", "Er is een nieuwe update beschikbaar.\nWil je updaten?", "Ja", "Nee");
-
-        if (!update) return;
-        
-        // Download update from localhost:8000
-        HttpClient client = new HttpClient()
+        catch (HttpRequestException e)
         {
-            BaseAddress = new Uri("http://localhost:8000")
-        };
-
-        OpenUrl("http://localhost:8000");
+            status.Text = "Fout: Niet gelukt om te updaten.";
+            status.TextColor = Colors.Red;
+            Console.WriteLine(e);
+        }
     }
     
     private void OpenUrl(string url)

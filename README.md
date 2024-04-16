@@ -7,3 +7,6 @@ Het idee is om derdejaarsstudenten zo’n designer te laten maken als invulling 
 ![Screenshot van Visual Studio](doc/visual%20studio%20designer.png)
 
 > Zie [randvoorwaarden](doc/randvoorwaarden.md) voor specifieke eisen waaraan de MAUI designer moet voldoen.
+
+Artikel voor publiceren MAUI apps met github actions:
+https://blog.taranissoftware.com/build-net-maui-apps-with-github-actions

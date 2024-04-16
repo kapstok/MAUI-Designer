@@ -8,6 +8,14 @@
             Spacing="25"
             Padding="30,0"
             VerticalOptions="Center">
+            <Label
+                x:Name="UpdateStatus"
+                FontSize="54"
+                TextColor="#512BD4"
+                MinimumHeightRequest="300"
+                HorizontalTextAlignment="Center">
+                    Controleren op updates...
+            </Label>
             <HorizontalStackLayout>
                 <Editor
                     MinimumWidthRequest="1150"
