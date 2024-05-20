@@ -102,6 +102,7 @@ img.logo {
 .dropdown {
     display: inline-block;
     width: 15vw;
+    cursor: default;
 }
 
 .dropdown:hover .dropdown-optn {
