@@ -10,3 +10,7 @@ Het idee is om derdejaarsstudenten zo’n designer te laten maken als invulling 
 
 Artikel voor publiceren MAUI apps met github actions:
 https://blog.taranissoftware.com/build-net-maui-apps-with-github-actions
+
+## Iconen
+
+Iconen komen van [Icons8](https://icons8.com/icons/3d-fluency--static).

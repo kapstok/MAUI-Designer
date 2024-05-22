@@ -4,28 +4,25 @@ using System.Runtime.InteropServices;
 using System.Xml;
 using System.IO;
 using System.Reflection;
+using Microsoft.Maui.Layouts;
 
 namespace MauiDesigner;
 
 public partial class MainPage : ContentPage
 {
-    private IDispatcherTimer timer;
     public string CURRENT_VERSION = "unset";
+    private IDispatcherTimer timer;
+    private Dock dock;
 
     public MainPage()
     {
         InitializeComponent();
         timer = Application.Current.Dispatcher.CreateTimer();
         timer.Interval = TimeSpan.FromSeconds(5);
-        timer.Tick += (sender, e) =>
-        {
-            Refresh();
-            // Preview(sender, e);
-            Console.WriteLine("REFRESH");
-        };
+        timer.Tick += (sender, e) => Refresh();
 
-        // string version = NSBundle.MainBundle.PathForResource("version", "txt");
         CheckForUpdates();
+        dock = new Dock();
     }
 
     private async void CheckForUpdates()
@@ -98,7 +95,6 @@ public partial class MainPage : ContentPage
 
     private void getAllNodes(XmlNode node)
     {
-        Console.WriteLine(node.NamespaceURI);
         if (node.Name == "Button")
         {
             node.Attributes.Remove(node.Attributes["Clicked"]);
@@ -125,7 +121,7 @@ public partial class MainPage : ContentPage
         try
         {
             ContentPage toBeDisplayed = new ContentPage().LoadFromXaml(doc.OuterXml);
-            AppShell.Current.CurrentItem = toBeDisplayed;
+            AppShell.Current.CurrentItem = dock.Draw(toBeDisplayed);
         }
         catch (XamlParseException ex)
         {
@@ -151,7 +147,7 @@ public partial class MainPage : ContentPage
         try
         {
             ContentPage toBeDisplayed = new ContentPage().LoadFromXaml(doc.OuterXml);
-            Navigation.PushAsync(toBeDisplayed);
+            Navigation.PushAsync(dock.Draw(toBeDisplayed));
         }
         catch (XamlParseException ex)
         {

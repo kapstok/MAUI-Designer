@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Voor Mac bouwen
+dotnet build ./src/MauiDesigner/MauiDesigner/MauiDesigner.csproj -f net7.0-maccatalyst
+./src/MauiDesigner/MauiDesigner/bin/Debug/net7.0-maccatalyst/maccatalyst-arm64/MauiDesigner.app/Contents/MacOS/MauiDesigner
