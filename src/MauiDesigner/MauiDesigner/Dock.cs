@@ -4,41 +4,41 @@ namespace MauiDesigner;
 
 public class Dock
 {
-    private VerticalStackLayout terminal;
     private AbsoluteLayout screen;
     private bool initialHideDock = true;
+    private ImageButton compileIcon;
+    private CompilePage compilePage;
 
     public Dock()
     {
-        Button button = new Button();
-        button.Text = "Close";
-        button.Clicked += (sender, args) => terminal.IsVisible = false;
-        
-        terminal = new VerticalStackLayout();
-        terminal.BackgroundColor = Color.FromRgba(81, 43, 212, 150);
-        terminal.IsVisible = false;
-        terminal.Children.Add(button);
-    }
-    
-    public ContentPage Draw(ContentPage contentPage)
-    {
-        ImageButton compileIcon = new ImageButton
+        compileIcon = new ImageButton
         {
             Source = "compile.png",
             HorizontalOptions = LayoutOptions.Center,
             VerticalOptions = LayoutOptions.End
         };
-        compileIcon.Clicked += (sender, args) =>
-        {
-            terminal.IsVisible = true;
-            terminal.WidthRequest = screen.Width;
-            terminal.HeightRequest = screen.Height - 150;
-        };
+
+        compilePage = new CompilePage();
+        compileIcon.Clicked += (sender, args) => compilePage.CompileTarget();
+    }
+
+    public void OnCompile(Action action)
+    {
+        compileIcon.Clicked += (sender, args) => action();
+    }
+
+    public void OnGoBack(Action action)
+    {
+        compilePage.Disappearing += (sender, args) => action();
+    }
+    
+    public ContentPage Draw(ContentPage contentPage)
+    {
+        compileIcon.Clicked += (sender, args) => Compile();
 
         screen = new AbsoluteLayout();
         screen.SetLayoutFlags(compileIcon, AbsoluteLayoutFlags.All);
         screen.SetLayoutBounds(compileIcon, new Rect(0, 0, 1, 1));
-        screen.Children.Add(terminal);
         screen.Children.Add(compileIcon);
 
         if (initialHideDock)
@@ -65,5 +65,10 @@ public class Dock
         contentPage.Content = grid;
 
         return contentPage;
+    }
+
+    private void Compile()
+    {
+        Shell.Current.CurrentPage.Navigation.PushAsync(compilePage);
     }
 }

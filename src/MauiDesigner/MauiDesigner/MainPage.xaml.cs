@@ -23,6 +23,9 @@ public partial class MainPage : ContentPage
 
         CheckForUpdates();
         dock = new Dock();
+        
+        dock.OnCompile(timer.Stop);
+        dock.OnGoBack(timer.Start);
     }
 
     private async void CheckForUpdates()
