@@ -20,7 +20,7 @@
                 <Editor
                     MinimumWidthRequest="1150"
                     x:Name="Editor"
-                    Text="../../../../../../../../test.xaml"
+                    Text="../../../../../MainPage.xaml"
                     Placeholder="No XAML loaded yet"></Editor>
                 <Button
                     Clicked="BrowseFiles"

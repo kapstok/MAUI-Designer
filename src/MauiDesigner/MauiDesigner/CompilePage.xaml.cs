@@ -20,11 +20,14 @@ public partial class CompilePage : ContentPage
     public void CompileTarget()
     {
         output.Text = "";
+        string csProjPath = Singleton.projPath + "/MauiDesigner.csproj";
+        Console.WriteLine(csProjPath);
+        
         #if Windows
             url = url.Replace("&", "^&");
             Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
         #elif MACCATALYST
-            _ = BuildAndRunOSX();
+            _ = BuildAndRunOSX(csProjPath);
         #elif Linux
         #else
             Console.WriteLine("Unsupported platform");
@@ -37,12 +40,12 @@ public partial class CompilePage : ContentPage
         CompileTarget();
     }
 
-    private async Task BuildAndRunOSX()
+    private async Task BuildAndRunOSX(string csProjPath)
     {
         var buildInfo = new ProcessStartInfo
         {
             FileName = "dotnet",
-            Arguments = "build /Users/werk/projecten/maui-designer/src/MauiDesigner/MauiDesigner/MauiDesigner.csproj -f net7.0-maccatalyst",
+            Arguments = "build " + csProjPath + " -f net7.0-maccatalyst -o /tmp/",
             RedirectStandardOutput = true,
             RedirectStandardError = true,
             UseShellExecute = false,

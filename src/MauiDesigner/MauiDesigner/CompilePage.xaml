@@ -11,7 +11,7 @@
             <Button Grid.Row="0" Margin="0, 20, 0, 0" WidthRequest="100" Text="Recompile" Clicked="Button_OnClicked"></Button>
             
             <ScrollView Grid.Row="1" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-                <Editor x:Name="Output" IsReadOnly="True" FontFamily="Courier" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"></Editor>
+                <Editor x:Name="Output" IsReadOnly="False" FontFamily="Courier" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"></Editor>
             </ScrollView>
         </Grid>
     </ContentPage.Content>

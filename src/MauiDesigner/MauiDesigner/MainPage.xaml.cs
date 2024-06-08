@@ -137,8 +137,9 @@ public partial class MainPage : ContentPage
 
     private void Preview(object sender, EventArgs e)
     {
-        string path = ((Editor)FindByName("Editor")).Text;
-        string xaml = File.ReadAllText(path);
+        string xamlPath = ((Editor)FindByName("Editor")).Text;
+        Singleton.projPath = Directory.GetParent(xamlPath).FullName;
+        string xaml = File.ReadAllText(xamlPath);
         XmlDocument doc = new XmlDocument();
         doc.LoadXml(xaml);
 
