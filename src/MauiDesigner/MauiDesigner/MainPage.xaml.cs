@@ -82,7 +82,7 @@ public partial class MainPage : ContentPage
         catch
         {
             // hack because of this: https://github.com/dotnet/corefx/issues/10361
-            #if Windows
+            #if WINDOWS
                 url = url.Replace("&", "^&");
                 Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
             #elif Linux
@@ -112,7 +112,8 @@ public partial class MainPage : ContentPage
     private void Refresh()
     {
         string path = ((Editor)FindByName("Editor")).Text;
-        string xaml = File.ReadAllText(path);
+        string fullPath = Path.IsPathRooted(path) ? path : Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + path;
+        string xaml = File.ReadAllText(fullPath);
         XmlDocument doc = new XmlDocument();
         doc.LoadXml(xaml);
 
@@ -125,8 +126,9 @@ public partial class MainPage : ContentPage
         {
             ContentPage toBeDisplayed = new ContentPage().LoadFromXaml(doc.OuterXml);
             AppShell.Current.CurrentItem = dock.Draw(toBeDisplayed);
+            //Navigation.PushAsync(toBeDisplayed);
         }
-        catch (XamlParseException ex)
+        catch (Exception ex)
         {
             ((ContentPage)Shell.Current.CurrentPage).Title = "Error loading XAML. See terminal output for details.";
             Shell.SetBackgroundColor(this, Color.FromRgb(0xff, 0x0, 0x0));
@@ -137,9 +139,10 @@ public partial class MainPage : ContentPage
 
     private void Preview(object sender, EventArgs e)
     {
-        string xamlPath = ((Editor)FindByName("Editor")).Text;
-        Singleton.projPath = Directory.GetParent(xamlPath).FullName;
-        string xaml = File.ReadAllText(xamlPath);
+        string path = ((Editor)FindByName("Editor")).Text;
+        string fullPath = Path.IsPathRooted(path) ? path : Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + path;
+        Singleton.projPath = Directory.GetParent(fullPath).FullName;
+        string xaml = File.ReadAllText(fullPath);
         XmlDocument doc = new XmlDocument();
         doc.LoadXml(xaml);
 

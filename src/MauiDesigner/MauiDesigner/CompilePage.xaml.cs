@@ -22,16 +22,15 @@ public partial class CompilePage : ContentPage
         output.Text = "";
         string csProjPath = Singleton.projPath + "/MauiDesigner.csproj";
         Console.WriteLine(csProjPath);
-        
-        #if Windows
-            url = url.Replace("&", "^&");
-            Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+
+        #if WINDOWS
+            _ = BuildAndRunWin(csProjPath);
         #elif MACCATALYST
             _ = BuildAndRunOSX(csProjPath);
         #elif Linux
         #else
             Console.WriteLine("Unsupported platform");
-            throw;
+            Application.Current.Quit();
         #endif
     }
 
@@ -51,7 +50,7 @@ public partial class CompilePage : ContentPage
             UseShellExecute = false,
             CreateNoWindow = true
         };
-        await ExecuteOSX(buildInfo);
+        await Execute(buildInfo);
         
         Dispatcher.Dispatch(() => output.Text += "Running App ..." + Environment.NewLine);
         
@@ -64,10 +63,38 @@ public partial class CompilePage : ContentPage
             UseShellExecute = false,
             CreateNoWindow = true
         };
-        await ExecuteOSX(runInfo);
+        await Execute(runInfo);
     }
 
-    private async Task ExecuteOSX(ProcessStartInfo processStartInfo)
+    private async Task BuildAndRunWin(string csProjPath)
+    {
+        string tempPath = Path.GetTempPath();
+        var buildInfo = new ProcessStartInfo
+        {
+            FileName = "dotnet",
+            Arguments = "build " + csProjPath + " -f net7.0-windows10.0.19041.0 -o " + tempPath,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+            CreateNoWindow = true
+        };
+        await Execute(buildInfo);
+
+        Dispatcher.Dispatch(() => output.Text += "Running App ..." + Environment.NewLine);
+
+        var runInfo = new ProcessStartInfo
+        {
+            FileName = "C:\\Users\\jan\\source\\repos\\MauiApp1\\MauiApp1\\bin\\Debug\\net8.0-windows10.0.19041.0\\win10-x64\\MauiApp1.exe",
+            Arguments = "",
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+            CreateNoWindow = true
+        };
+        await Execute(runInfo);
+    }
+
+    private async Task Execute(ProcessStartInfo processStartInfo)
     {
         var process = new Process
         {

@@ -6,12 +6,12 @@
     <ContentPage.Content>
         <Grid
             RowDefinitions="Auto, *"
-            Padding="30,0">
+            Padding="30,10">
             
             <Button Grid.Row="0" Margin="0, 20, 0, 0" WidthRequest="100" Text="Recompile" Clicked="Button_OnClicked"></Button>
-            
+
             <ScrollView Grid.Row="1" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-                <Editor x:Name="Output" IsReadOnly="False" FontFamily="Courier" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"></Editor>
+                <Editor x:Name="Output" IsReadOnly="False" FontFamily="Courier" HeightRequest="500" AutoSize="TextChanges" HorizontalOptions="FillAndExpand"></Editor>
             </ScrollView>
         </Grid>
     </ContentPage.Content>
